@@ -1,0 +1,10 @@
+.build/
+dist/
+.swiftpm/
+.DS_Store
+*.xcuserstate
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
