@@ -2,6 +2,14 @@
 
 原生 macOS 应用，使用 SwiftUI 系统侧栏、表单和列表。文字协议可使用原生 Swift AI SDK；连接 CLIProxyAPI 时需要独立的本机服务。
 
+[![macOS CI and Release](https://github.com/tietiezhi-1216/aihub/actions/workflows/macos.yml/badge.svg)](https://github.com/tietiezhi-1216/aihub/actions/workflows/macos.yml)
+
+## 下载与分发
+
+从 [GitHub Releases](https://github.com/tietiezhi-1216/aihub/releases) 下载开发预览：Apple Silicon（M 系列）选 `arm64`，Intel Mac 选 `x86_64`。打开 DMG 将 AIHub 拖到 Applications，或解压 ZIP 后复制应用。支持 macOS 14+。
+
+当前应用为 ad-hoc 签名、未 Apple 公证，首次打开可能被 Gatekeeper 拦截；请在核对来源后遵循系统提示，不关闭系统安全检查。真实账号 / API / 中文 ASR 尚未全部验收，不能当作正式稳定版。
+
 ## 当前功能
 
 - 侧栏顺序：**模型 → 听写 → 用量 → 权限**。
@@ -39,6 +47,28 @@ CODE_SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)" ./scripts/buil
 ```
 
 脚本只签名，不自动公证。
+
+## GitHub Actions
+
+提交到 `main`、Pull Request 或手动运行会在 Apple Silicon / Intel 两种标准 macOS runner 上执行测试、构建并上传 DMG / ZIP / SHA-256 校验文件（Actions 构建产物保留 14 天）。不需要额外配置凭据，不调用真实账号或付费 API。
+
+发布只需推送版本标签：
+
+```bash
+git tag v0.1.1
+git push origin v0.1.1
+```
+
+两个架构全部测试 / 构建通过后，Actions 自动创建 GitHub **开发预览 Release**。版本写入应用 Info.plist；仅发布任务有仓库写入权限，Actions 固定提交 SHA。首次版本为 `v0.1.0`；这里的 `v0.1.1` 是后续版本示例，详见 [发布说明](docs/releases.md)。
+
+本机打包：
+
+```bash
+APP_VERSION=0.1.1 APP_BUILD_NUMBER=2 ./scripts/build-app.sh
+./scripts/package-release.sh
+```
+
+正式 Developer ID 签名 / Apple 公证需要自己的 Apple 开发者证书，当前流水线不伪称已经完成。
 
 ## 添加模型
 
